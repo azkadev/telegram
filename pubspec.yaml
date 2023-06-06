@@ -25,6 +25,8 @@ dependencies:
   path_provider: ^2.0.15
   telegram_client_flutter: ^0.0.9
   path: ^1.8.3
+  googleapis_client: ^0.0.4
+  translate_client: ^0.0.1
 
 dev_dependencies:
   flutter_lints: ^2.0.1
