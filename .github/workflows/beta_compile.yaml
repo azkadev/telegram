@@ -76,19 +76,8 @@ jobs:
         shell: bash
         run: | 
           flutter pub get
-
           flutter pub run packagex create .
           flutter pub run packagex build all
-          if [ "$RUNNER_OS" == "Linux" ]; then
-            mv build/packagex/* ./build
-          fi
-          if [ "$RUNNER_OS" == "Windows" ]; then 
-            mv build/packagex/* ./build
-          fi
-          if [ "$RUNNER_OS" == "macOS" ]; then
-            mv build/packagex/* ./build
-          fi
-          flutter clean 
 
       - name: Publish artifact
         uses: actions/upload-artifact@v3

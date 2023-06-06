@@ -46,8 +46,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  assets:    
-    - assets/
+  # assets:    
+    # - assets/
     # - assets/icons/
     
 msix_config: 
