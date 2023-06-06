@@ -14,6 +14,12 @@ cd telegram
 flutter build
 ```
 
+### Docs Source Learning Development This Project
+
+1. [TDLIB - DOCS](https://core.telegram.org/tdlib/docs)
+2. [Flutter](https://docs.flutter.dev/)
+3. [Dart](https://dart.dev/guides)
+
 ### Screenshot Development
 
 ![](.github/assets/sign_page_0_dev.png)
