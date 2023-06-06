@@ -1,8 +1,8 @@
 name: telegram
-description: A new Flutter project.
+description: A Telegram App Flutter Open Source.
 homepage: https://youtube.com/@azkadev
-repository: https://github.com/azkadev
-issue_tracker: https://github.com/azkadev/azkadev
+repository: https://github.com/azkadev/telegram
+issue_tracker: https://github.com/azkadev/telegram/azkadev
 documentation: https://youtube.com/@azkadev
 version: 0.0.0
 publish_to: none
