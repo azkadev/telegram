@@ -19,7 +19,7 @@ dependencies:
   universal_io: ^2.2.0
   galaxeus_lib_flutter: ^0.0.8
   cool_alert: ^2.0.1
-  telegram_client: any
+  telegram_client: ^0.4.20
   isar: ^3.1.0+1
   isar_flutter_libs: ^3.1.0+1
   path_provider: ^2.0.15

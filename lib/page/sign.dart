@@ -134,7 +134,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                   await Future.delayed(Duration(milliseconds: 1));
                   Map res = await widget.tdlib.invoke(
                     "getAuthorizationState",
-                    isThrowOnError: false,
+                    isInvokeThrowOnError: false,
                   );
                   res.printPretty();
                   if (res["@type"] == "authorizationStateWaitTdlibParameters") {
@@ -143,7 +143,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                       parameters: {
                         ...widget.tdlib.client_option,
                       },
-                      isThrowOnError: false,
+                      isInvokeThrowOnError: false,
                     );
 
                     p.printPretty();
@@ -172,7 +172,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                           "encryption_key": base64.encode(utf8.encode(
                               widget.tdlib.client_option["database_key"]))
                         },
-                        isThrowOnError: false,
+                        isInvokeThrowOnError: false,
                       );
 
                       p.printPretty();
@@ -186,7 +186,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                           "new_encryption_key": base64.encode(utf8.encode(
                               widget.tdlib.client_option["database_key"]))
                         },
-                        isThrowOnError: false,
+                        isInvokeThrowOnError: false,
                       );
 
                       p.printPretty();
@@ -205,7 +205,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                         "phone_number": textEditingController.text.replaceAll(
                             RegExp(r"((\+)| )", caseSensitive: false), ""),
                       },
-                      isThrowOnError: false,
+                      isInvokeThrowOnError: false,
                     );
                     code.printPretty();
 
@@ -360,7 +360,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                       await Future.delayed(Duration(milliseconds: 1));
                       Map res = await widget.tdlib.invoke(
                         "getAuthorizationState",
-                        isThrowOnError: false,
+                        isInvokeThrowOnError: false,
                       );
                       res.printPretty();
                       if (res["@type"] ==
@@ -373,7 +373,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                             "last_name":
                                 first_name_text_editing_controller.text,
                           },
-                          isThrowOnError: false,
+                          isInvokeThrowOnError: false,
                         );
                         if (p["@type"] == "error") {
                           setState(() {
@@ -593,7 +593,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                       await Future.delayed(Duration(milliseconds: 1));
                       Map res = await widget.tdlib.invoke(
                         "getAuthorizationState",
-                        isThrowOnError: false,
+                        isInvokeThrowOnError: false,
                       );
                       res.printPretty();
                       if (res["@type"] == "authorizationStateWaitCode") {
@@ -602,7 +602,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                           parameters: {
                             "code": textEditingController.text,
                           },
-                          isThrowOnError: false,
+                          isInvokeThrowOnError: false,
                         );
 
                         code.printPretty();

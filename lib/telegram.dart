@@ -12,8 +12,7 @@ import 'package:universal_io/io.dart';
 import "package:path/path.dart" as path;
 
 import "package:galaxeus_lib/galaxeus_lib.dart" as glx_lib;
-import "package:telegram/database/scheme/scheme.dart"
-    as isar_scheme;
+import "package:telegram/database/scheme/scheme.dart" as isar_scheme;
 
 class Telegram extends StatefulWidget {
   const Telegram({super.key});
@@ -45,16 +44,14 @@ class _TelegramState extends State<Telegram> {
   Future<void> task() async {
     Future(() async {
       Directory get_app_docs_dir = await getApplicationDocumentsDirectory();
-      Directory app_tg_account =
-          Directory(path.join(get_app_docs_dir.path, "tg_account"));
+      Directory app_tg_account = Directory(path.join(get_app_docs_dir.path, "tg_account"));
       if (app_tg_account.existsSync()) {
         await app_tg_account.delete(recursive: true);
       }
       if (!app_tg_account.existsSync()) {
         await app_tg_account.create(recursive: true);
       }
-      Directory app_tg_dir =
-          Directory(path.join(get_app_docs_dir.path, "tg_dir"));
+      Directory app_tg_dir = Directory(path.join(get_app_docs_dir.path, "tg_dir"));
       if (!app_tg_dir.existsSync()) {
         await app_tg_dir.create(recursive: true);
       }
@@ -94,13 +91,7 @@ class _TelegramState extends State<Telegram> {
           );
 
           for (var i = 0; i < count_datas.length; i++) {
-            List<isar_scheme.TgClientData> tgClientDatas = await isar_db_account
-                .tgClientDatas
-                .filter()
-                .idGreaterThan(0)
-                .offset(count_datas[i])
-                .limit(10)
-                .findAll();
+            List<isar_scheme.TgClientData> tgClientDatas = await isar_db_account.tgClientDatas.filter().idGreaterThan(0).offset(count_datas[i]).limit(10).findAll();
 
             for (var index = 0; index < tgClientDatas.length; index++) {
               isar_scheme.TgClientData tgClientData = tgClientDatas[index];
@@ -121,8 +112,9 @@ class _TelegramState extends State<Telegram> {
           'api_hash': 'a3406de8d171bb422bb6ddf3bbd800e2',
           'database_directory': path.join(app_tg_account.path, "data"),
           'files_directory': path.join(app_tg_account.path, "files"),
-          "use_test_dc": kDebugMode,
+          "use_test_dc": false,
         },
+        isInvokeThrowOnError: false,
       );
 
       bool is_complete = false;
@@ -140,10 +132,8 @@ class _TelegramState extends State<Telegram> {
             );
 
             if (authStateType == "authorizationStateWaitRegistration") {
-              if (update.raw["authorization_state"]["terms_of_service"]
-                  is Map) {
-                Map terms_of_service = update.raw["authorization_state"]
-                    ["terms_of_service"] as Map;
+              if (update.raw["authorization_state"]["terms_of_service"] is Map) {
+                Map terms_of_service = update.raw["authorization_state"]["terms_of_service"] as Map;
                 if (terms_of_service["text"] is Map) {
                   await tdlib.invoke(
                     "registerUser",

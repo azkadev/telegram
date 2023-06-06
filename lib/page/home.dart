@@ -177,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                 parameters: {
                   "limit": 500,
                 },
-                isThrowOnError: false,
+                isInvokeThrowOnError: false,
               );
 
               if (res["@type"] == "chats" && res["total_count"] is int) {
@@ -188,7 +188,7 @@ class _HomePageState extends State<HomePage> {
                     parameters: {
                       "limit": total_count,
                     },
-                    isThrowOnError: false,
+                    isInvokeThrowOnError: false,
                   );
                 }
                 return res;
@@ -221,7 +221,7 @@ class _HomePageState extends State<HomePage> {
                           parameters: {
                             "chat_id": chat_ids[index],
                           },
-                          isThrowOnError: false,
+                          isInvokeThrowOnError: false,
                         );
                       }.call(),
                       builder: (context, snapshot) {
@@ -418,7 +418,7 @@ class _HomePageState extends State<HomePage> {
                       parameters: {
                         "query": searchTextEditingController.text,
                       },
-                      isThrowOnError: false,
+                      isInvokeThrowOnError: false,
                     );
 
                     return chats;
@@ -450,7 +450,7 @@ class _HomePageState extends State<HomePage> {
                               parameters: {
                                 "chat_id": chat_ids[index],
                               },
-                              isThrowOnError: false,
+                              isInvokeThrowOnError: false,
                             );
                           }.call(),
                           builder: (context, snapshot) {
