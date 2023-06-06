@@ -23,6 +23,7 @@ jobs:
           channel: "stable"
       - name: Translate
         run: |
+          dart pub get
           dart run bin/generate_language_scheme.dart
 
       - name: Update repo
