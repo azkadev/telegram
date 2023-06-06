@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+ln -s /usr/share/app-ui-template/telegram /usr/bin/app-ui-template
+chmod +x /usr/bin/app-ui-template
+exit 0

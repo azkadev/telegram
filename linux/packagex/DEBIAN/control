@@ -1,0 +1,10 @@
+Maintainer: "azkadev <azkadev@noemail.com>"
+Package: app-ui-template
+Version: 0.0.0
+Section: x11
+Priority: optional
+Architecture: amd64
+Essential: no
+Installed-Size: 0
+Description: "A new Flutter project."
+Homepage: "https://github.com/azkadev"
