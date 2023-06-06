@@ -1,0 +1,35 @@
+name: Translate Language
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    name: Translate Language @azkadev
+    runs-on: ubuntu-latest
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
+    steps:
+      - name: Export Release Timestamp
+        run: echo "APP_VERSION=v$(date +'%Y.%m.%d.%H.%M.%S')" >> $GITHUB_ENV
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.10.0"
+          channel: "stable"
+      - name: Translate
+        run: |
+          dart run bin/generate_language_scheme.dart
+
+      - name: Update repo
+        run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Azkadev"
+          git add .
+          git commit -m "update: language"
+          git push
+
