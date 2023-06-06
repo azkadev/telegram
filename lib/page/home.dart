@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:galaxeus_lib_flutter/galaxeus_lib_flutter.dart';
 import 'package:telegram_client/telegram_client.dart';
 import "package:galaxeus_lib/galaxeus_lib.dart" as glx_lib;
+import 'package:universal_io/io.dart';
 
 class HomePage extends StatefulWidget {
   final Tdlib tdlib;
@@ -74,7 +75,7 @@ class _HomePageState extends State<HomePage> {
           },
           child: const Icon(Icons.menu),
         ),
-        title: const Text("Telegram Client"),
+        title: const Text("Telegra"),
         actions: [
           MaterialButton(
             minWidth: 0,
@@ -236,29 +237,89 @@ class _HomePageState extends State<HomePage> {
                         if (snapshot.data is Map) {
                           Map chat = snapshot.data ?? {};
 
-                          // chat.printPretty();
-                          DecorationImage? image;
-
-                          if (chat["photo"] is Map) {
-                            Map photo = chat["photo"];
-                            if (photo["minithumbnail"] is Map &&
-                                photo["minithumbnail"]["data"] is String) {
-                              image = DecorationImage(
-                                fit: BoxFit.cover,
-                                image: Image.memory(
-                                  base64Decode(photo["minithumbnail"]["data"]),
-                                ).image,
-                              );
-                            }
-                          }
-
                           return ListTile(
                             onTap: () async {},
-                            leading: Container(
-                              height: 45,
-                              width: 45,
-                              decoration: BoxDecoration(
-                                  color: Colors.red, image: image),
+                            leading: FutureBuilder<DecorationImage?>(
+                              future: Future<DecorationImage?>(() async {
+                                if (chat["photo"] is Map) {
+                                  Map photo = chat["photo"];
+                                  if (photo["small"] is Map) {
+                                    if (photo["small"]["local"] is Map && photo["small"]["local"]["path"] is String && (photo["small"]["local"]["path"] as String).isNotEmpty) {
+                                      File file = File(photo["small"]["local"]["path"]);
+                                      if (file.existsSync()) {
+                                        return DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: Image.file(file).image,
+                                        );
+                                      }
+                                    }
+
+                                    var res = await widget.tdlib.invoke(
+                                      "downloadFile",
+                                      parameters: {
+                                        "file_id": photo["small"]["id"],
+                                        "priority": 1,
+                                        "offset": 0,
+                                        "limit": 1,
+                                        "synchronous": true,
+                                      },
+                                    );
+                                    res.printPretty();
+                                    if (res["local"] is Map && res["local"]["path"] is String && (res["local"]["path"] as String).isNotEmpty) {
+                                      File file = File(res["local"]["path"]);
+                                      if (file.existsSync()) {
+                                        return DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: Image.file(file).image,
+                                        );
+                                      }
+                                    }
+                                  }
+
+                                  if (photo["minithumbnail"] is Map && photo["minithumbnail"]["data"] is String) {
+                                    return DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: Image.memory(
+                                        base64Decode(photo["minithumbnail"]["data"]),
+                                      ).image,
+                                    );
+                                  }
+                                }
+                                return null;
+                              }),
+                              initialData: () {
+                                DecorationImage? image;
+                                if (chat["photo"] is Map) {
+                                  Map photo = chat["photo"];
+                                  if (photo["minithumbnail"] is Map && photo["minithumbnail"]["data"] is String) {
+                                    image = DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: Image.memory(
+                                        base64Decode(photo["minithumbnail"]["data"]),
+                                      ).image,
+                                    );
+                                  }
+                                }
+                                return image;
+                              }.call(),
+                              builder: (context, snapshot) {
+                                return Container(
+                                  height: 45,
+                                  width: 45,
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    image: snapshot.data,
+                                  ),
+                                  child: Visibility(
+                                    visible: snapshot.data == null,
+                                    child: Center(
+                                      child: Text(
+                                        "${chat["title"] ?? "-"}"[0],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                             title: Text(
                               chat["title"] ?? "",
@@ -297,8 +358,7 @@ class _HomePageState extends State<HomePage> {
     await showDialog(
       context: context,
       builder: (context) {
-        TextEditingController searchTextEditingController =
-            TextEditingController();
+        TextEditingController searchTextEditingController = TextEditingController();
 
         return StatefulBuilder(
           builder: (context, setStat) {
@@ -402,8 +462,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () async {
                       setStat(() {});
                     },
-                    child: const RotatedBox(
-                        quarterTurns: 2, child: Icon(Icons.arrow_back_ios_new)),
+                    child: const RotatedBox(quarterTurns: 2, child: Icon(Icons.arrow_back_ios_new)),
                   ),
                 ],
               ),
@@ -470,13 +529,11 @@ class _HomePageState extends State<HomePage> {
 
                               if (chat["photo"] is Map) {
                                 Map photo = chat["photo"];
-                                if (photo["minithumbnail"] is Map &&
-                                    photo["minithumbnail"]["data"] is String) {
+                                if (photo["minithumbnail"] is Map && photo["minithumbnail"]["data"] is String) {
                                   image = DecorationImage(
                                     fit: BoxFit.cover,
                                     image: Image.memory(
-                                      base64Decode(
-                                          photo["minithumbnail"]["data"]),
+                                      base64Decode(photo["minithumbnail"]["data"]),
                                     ).image,
                                   );
                                 }
@@ -487,8 +544,7 @@ class _HomePageState extends State<HomePage> {
                                 leading: Container(
                                   height: 45,
                                   width: 45,
-                                  decoration: BoxDecoration(
-                                      color: Colors.red, image: image),
+                                  decoration: BoxDecoration(color: Colors.red, image: image),
                                 ),
                                 title: Text(
                                   chat["title"] ?? "",
