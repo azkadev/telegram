@@ -7,7 +7,7 @@ Wip Telegram Open Source
 
 ### Information
 
-Dikarenakan Ini Open Source Jadi saya tidak mementingkan ui ux yang bagus jika kamu ingin memakai ui yang bagus pakai Versi [Glx Gram](https://github.com/azkadev/glx_gram)
+Dikarenakan Ini Open Source Jadi saya tidak mementingkan ui ux yang bagus jika kamu ingin memakai ui yang bagus pakai Versi [Glx Gram](https://github.com/azkadev/telegram)
 
 ### Building / Compile Project
 

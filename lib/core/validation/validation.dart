@@ -2,7 +2,7 @@ import 'package:galaxeus_lib/galaxeus_lib.dart';
 
 enum ValidationDataType {
   username,
-  phone_number,
+  phone_number_or_token_bot,
   password,
   code,
   token_bot,
@@ -36,10 +36,11 @@ ValidationData validation({
       validationData.message = "Token Bot harus ada";
     }
   }
-  if (validationDataType == ValidationDataType.phone_number) {
+  if (validationDataType == ValidationDataType.phone_number_or_token_bot) {
     if (data != null) {
-      if (!RegExp(r"^((\+)?[0-9]+)$", caseSensitive: false).hashData(data)) {
-        validationData.message = "Format Phone Number Salah";
+      if (!RegExp(r"^((\+)?([0-9]+)(:[a-z0-9_\-]+)?)$", caseSensitive: false)
+          .hashData(data)) {
+        validationData.message = "Format Phone Number Or Token Bot Salah";
       } else {
         validationData.is_valid = true;
       }

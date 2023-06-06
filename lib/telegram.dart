@@ -2,7 +2,11 @@
 
 import 'dart:async';
 
-import 'package:telegram/page/page.dart'; 
+import 'package:galaxeus_lib_flutter/galaxeus_lib_flutter.dart';
+import 'package:telegram/app_data/app_data.dart';
+import 'package:telegram/database/database.dart';
+import 'package:telegram/page/page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -42,15 +46,19 @@ class _TelegramState extends State<Telegram> {
 
   Future<void> task() async {
     Future(() async {
+      Directory get_app_temp_dir = await getTemporaryDirectory();
+      Directory get_app_support_dir = await getApplicationSupportDirectory();
       Directory get_app_docs_dir = await getApplicationDocumentsDirectory();
-      Directory app_tg_account = Directory(path.join(get_app_docs_dir.path, "tg_account"));
+      Directory app_tg_account =
+          Directory(path.join(get_app_docs_dir.path, "tg_account"));
       if (app_tg_account.existsSync()) {
         await app_tg_account.delete(recursive: true);
       }
       if (!app_tg_account.existsSync()) {
         await app_tg_account.create(recursive: true);
       }
-      Directory app_tg_dir = Directory(path.join(get_app_docs_dir.path, "tg_dir"));
+      Directory app_tg_dir =
+          Directory(path.join(get_app_docs_dir.path, "tg_dir"));
       if (!app_tg_dir.existsSync()) {
         await app_tg_dir.create(recursive: true);
       }
@@ -90,7 +98,13 @@ class _TelegramState extends State<Telegram> {
           );
 
           for (var i = 0; i < count_datas.length; i++) {
-            List<isar_scheme.TgClientData> tgClientDatas = await isar_db_account.tgClientDatas.filter().idGreaterThan(0).offset(count_datas[i]).limit(10).findAll();
+            List<isar_scheme.TgClientData> tgClientDatas = await isar_db_account
+                .tgClientDatas
+                .filter()
+                .idGreaterThan(0)
+                .offset(count_datas[i])
+                .limit(10)
+                .findAll();
 
             for (var index = 0; index < tgClientDatas.length; index++) {
               isar_scheme.TgClientData tgClientData = tgClientDatas[index];
@@ -104,6 +118,7 @@ class _TelegramState extends State<Telegram> {
         },
         silent: true,
       );
+      DatabaseApp databaseApp = DatabaseApp();
 
       Tdlib tdlib = Tdlib(
         clientOption: {
@@ -111,9 +126,17 @@ class _TelegramState extends State<Telegram> {
           'api_hash': 'a3406de8d171bb422bb6ddf3bbd800e2',
           'database_directory': path.join(app_tg_account.path, "data"),
           'files_directory': path.join(app_tg_account.path, "files"),
-          "use_test_dc": false,
+          "use_test_dc": kDebugMode,
         },
         isInvokeThrowOnError: false,
+      );
+
+      AppData appData = AppData(
+        appTempDirectory: get_app_temp_dir,
+        appSupportDirectory: get_app_support_dir,
+        appDocumentDirectory: get_app_docs_dir,
+        tg: tdlib,
+        databaseApp: databaseApp,
       );
 
       bool is_complete = false;
@@ -121,7 +144,6 @@ class _TelegramState extends State<Telegram> {
         if (update.raw["@type"] == "updateAuthorizationState") {
           if (update.raw["authorization_state"] is Map) {
             var authStateType = update.raw["authorization_state"]["@type"];
-
             update.client_option["database_key"] = "";
             await tdlib.initClient(
               update,
@@ -130,21 +152,7 @@ class _TelegramState extends State<Telegram> {
               isVoid: true,
             );
 
-            if (authStateType == "authorizationStateWaitRegistration") {
-              if (update.raw["authorization_state"]["terms_of_service"] is Map) {
-                Map terms_of_service = update.raw["authorization_state"]["terms_of_service"] as Map;
-                if (terms_of_service["text"] is Map) {
-                  await tdlib.invoke(
-                    "registerUser",
-                    parameters: {
-                      "first_name": "random name",
-                      "last_name": "Azkadev ${DateTime.now().toString()}",
-                    },
-                    clientId: update.client_id,
-                  );
-                }
-              }
-            }
+            if (authStateType == "authorizationStateWaitRegistration") {}
 
             if (authStateType == "authorizationStateLoggingOut") {
               await tdlib.exitClientById(update.client_id);
@@ -176,11 +184,11 @@ class _TelegramState extends State<Telegram> {
         if (is_complete) {
           listener.cancel();
           timer.cancel();
-          await Navigator.of(context).pushReplacement(
+          await context.navigator().pushReplacement(
             MaterialPageRoute(
               builder: (context) {
                 return SignPage(
-                  tdlib: tdlib,
+                  appData: appData,
                 );
               },
             ),

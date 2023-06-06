@@ -1,6 +1,7 @@
-// ignore_for_file: constant_identifier_names, prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: constant_identifier_names, prefer_const_constructors, use_build_context_synchronously, unused_local_variable, dead_code
 
 import "dart:convert";
+import "dart:math";
 
 import "package:telegram/core/core.dart";
 
@@ -11,11 +12,15 @@ import "package:galaxeus_lib/galaxeus_lib.dart";
 
 // import "package:galaxeus_lib/galaxeus_lib.dart";
 import "package:galaxeus_lib_flutter/galaxeus_lib_flutter.dart";
-import "package:telegram_client/telegram_client.dart";
+import "package:telegram/widget/widget.dart";
 import "package:path/path.dart" as path;
+import "package:iconsax/iconsax.dart";
 
 enum SignPageWaitType {
-  phone_number,
+  phone_number_or_token_bot,
+  code_telegram,
+  code_sms,
+  code_email,
   code,
   password,
   secret_word,
@@ -27,11 +32,10 @@ enum SignPageWaitType {
   registration,
 }
 
-class SignPage extends StatefulWidget {
-  final Tdlib tdlib;
+class SignPage extends TelegramStatefulWidget {
   const SignPage({
     super.key,
-    required this.tdlib,
+    required super.appData,
   });
 
   @override
@@ -59,21 +63,19 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
     vsync: this,
   );
 
-  TextEditingController first_name_text_editing_controller =
-      TextEditingController();
-  TextEditingController last_name_text_editing_controller =
-      TextEditingController();
+  TextEditingController first_name_text_editing_controller = TextEditingController();
+  TextEditingController last_name_text_editing_controller = TextEditingController();
   TextEditingController textEditingController = TextEditingController();
   TextEditingController reasonEditingController = TextEditingController();
   TextEditingController keyEditingController = TextEditingController();
 
   bool is_obscure_text = true;
-  SignPageWaitType signPageWaitType = SignPageWaitType.phone_number;
+  SignPageWaitType signPageWaitType = SignPageWaitType.phone_number_or_token_bot;
   List<int> code = [];
   bool is_procces = false;
   bool get is_test_dc {
     try {
-      return widget.tdlib.client_option["use_test_dc"] as bool;
+      return widget.appData.tg.client_option["use_test_dc"] as bool;
     } catch (e) {}
     return false;
   }
@@ -86,6 +88,15 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appBar: AppBar(
+      //   backgroundColor: Color.fromRGBO(
+      //     0,
+      //     0,
+      //     0,
+      //     0,
+      //   ),
+      //   actions: [],
+      // ),
       body: SingleChildScrollView(
         child: ConstrainedBox(
           constraints: BoxConstraints(
@@ -96,148 +107,241 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
         ),
       ),
       floatingActionButton: Visibility(
-          visible: (signPageWaitType == SignPageWaitType.phone_number),
-          child: FloatingActionButton(
-            onPressed: () async {
-              ValidationData validationData = validation(
-                  data: textEditingController.text,
-                  validationDataType: ValidationDataType.phone_number);
-              if (validationData.message != null) {
-                //
-                await CoolAlert.show(
-                  context: context,
-                  type: CoolAlertType.info,
-                  title: "Phone Number",
-                  text: validationData.message,
-                );
-                return;
-              }
+        visible: (signPageWaitType == SignPageWaitType.phone_number_or_token_bot),
+        child: FloatingActionButton(
+          onPressed: () async {
+            ValidationData validationData = validation(data: textEditingController.text, validationDataType: ValidationDataType.phone_number_or_token_bot);
+            if (validationData.message != null) {
+              //
+              await CoolAlert.show(
+                context: context,
+                type: CoolAlertType.info,
+                title: "Phone Number Or Token Bot",
+                text: validationData.message,
+              );
+              return;
+            }
 
-              if (is_procces) {
-                return;
-              }
-              if (is_procces) {
-                return;
-              }
-              print(widget.tdlib.client_id);
-              print(widget.tdlib.client_id == 94539460370112);
-              print(widget.tdlib.messageTdlibToApi(94539460370112));
-              print(widget.tdlib.messageTdlibToApi(widget.tdlib.client_id));
-              setState(() {
-                is_procces = true;
-              });
-              Future(() async {
-                while (true) {
-                  if (is_procces == false) {
-                    break;
-                  }
-                  await Future.delayed(Duration(milliseconds: 1));
-                  Map res = await widget.tdlib.invoke(
-                    "getAuthorizationState",
-                    isInvokeThrowOnError: false,
-                  );
-                  res.printPretty();
-                  if (res["@type"] == "authorizationStateWaitTdlibParameters") {
-                    var p = await widget.tdlib.invoke(
-                      "setTdlibParameters",
-                      parameters: {
-                        ...widget.tdlib.client_option,
-                      },
-                      isInvokeThrowOnError: false,
-                    );
+            if (is_procces) {
+              return;
+            }
 
-                    p.printPretty();
-                    if (p["@type"] == "error") {
-                      if (RegExp(
-                              r"(because it is already in use by current program)",
-                              caseSensitive: false)
-                          .hashData(p["message"])) {
-                        widget.tdlib.client_option["database_directory"] =
-                            path.join(
-                                widget
-                                    .tdlib.client_option["database_directory"],
-                                "data_${DateTime.now().millisecondsSinceEpoch}");
-                        continue;
-                      }
-                      break;
-                    }
-                  } else if (res["@type"] ==
-                      "authorizationStateWaitEncryptionKey") {
-                    bool isEncrypted =
-                        res["authorization_state"]['is_encrypted'];
-                    if (isEncrypted) {
-                      var p = await widget.tdlib.invoke(
-                        "checkDatabaseEncryptionKey",
-                        parameters: {
-                          "encryption_key": base64.encode(utf8.encode(
-                              widget.tdlib.client_option["database_key"]))
-                        },
-                        isInvokeThrowOnError: false,
-                      );
-
-                      p.printPretty();
-                      if (p["@type"] == "error") {
-                        break;
-                      }
-                    } else {
-                      var p = await widget.tdlib.invoke(
-                        "setDatabaseEncryptionKey",
-                        parameters: {
-                          "new_encryption_key": base64.encode(utf8.encode(
-                              widget.tdlib.client_option["database_key"]))
-                        },
-                        isInvokeThrowOnError: false,
-                      );
-
-                      p.printPretty();
-                      if (p["@type"] == "error") {
-                        break;
-                      }
-                    }
-                  } else if (res["@type"] ==
-                      "authorizationStateWaitPhoneNumber") {
-                    if (textEditingController.text.isEmpty) {
-                      break;
-                    }
-                    var code = await widget.tdlib.invoke(
-                      "setAuthenticationPhoneNumber",
-                      parameters: {
-                        "phone_number": textEditingController.text.replaceAll(
-                            RegExp(r"((\+)| )", caseSensitive: false), ""),
-                      },
-                      isInvokeThrowOnError: false,
-                    );
-                    code.printPretty();
-
-                    if (code["@type"] == "error") {
-                      break;
-                    }
-                  } else if (res["@type"] == "authorizationStateWaitCode") {
-                    setState(() {
-                      is_procces = false;
-                      signPageWaitType = SignPageWaitType.code;
-                    });
-                    break;
-                  } else if (res["@type"] == "error") {
-                    setState(() {
-                      is_procces = false;
-                    });
-                    break;
-                  } else {
-                    setState(() {
-                      is_procces = false;
-                    });
-                    break;
-                  }
-                }
-              });
-            },
+            setState(() {
+              is_procces = true;
+            });
+            handleAuth();
+          },
+          child: Visibility(
+            visible: is_procces == false,
+            replacement: CircularProgressIndicator(
+              color: Colors.white,
+            ),
             child: RotatedBox(
               quarterTurns: 2,
               child: Icon(Icons.arrow_back),
             ),
-          )),
+          ),
+        ),
+      ),
     );
+  }
+
+  void handleAuth() {
+    // context.navigator().pushReplacement(MaterialPageRoute(
+    //   builder: (context) {
+    //     return HomePage(
+    //       appData: widget.appData,
+    //     );
+    //   },
+    // ));
+    // return;
+    Future(() async {
+      while (true) {
+        await Future.delayed(Duration(milliseconds: 1));
+        if (is_procces == false) {
+          break;
+        }
+
+        Map res = await widget.appData.tg.invoke(
+          "getAuthorizationState",
+        );
+        res.printPretty();
+        if (res["@type"] == "authorizationStateWaitTdlibParameters") {
+          var p = await widget.appData.tg.invoke(
+            "setTdlibParameters",
+            parameters: {
+              ...widget.appData.tg.client_option,
+              "use_test_dc": is_test_dc,
+            },
+          );
+
+          p.printPretty();
+          if (p["@type"] == "error") {
+            if (RegExp(r"(because it is already in use by current program)", caseSensitive: false).hashData(p["message"])) {
+              widget.appData.tg.client_option["database_directory"] = path.join(widget.appData.tg.client_option["database_directory"], "data_${DateTime.now().millisecondsSinceEpoch}");
+              continue;
+            }
+            break;
+          }
+        } else if (res["@type"] == "authorizationStateWaitEncryptionKey") {
+          bool isEncrypted = res["authorization_state"]['is_encrypted'];
+          if (isEncrypted) {
+            var p = await widget.appData.tg.invoke(
+              "checkDatabaseEncryptionKey",
+              parameters: {
+                "encryption_key": base64.encode(utf8.encode(widget.appData.tg.client_option["database_key"])),
+              },
+            );
+
+            p.printPretty();
+            if (p["@type"] == "error") {
+              break;
+            }
+          } else {
+            var p = await widget.appData.tg.invoke(
+              "setDatabaseEncryptionKey",
+              parameters: {
+                "new_encryption_key": base64.encode(
+                  utf8.encode(
+                    widget.appData.tg.client_option["database_key"],
+                  ),
+                ),
+              },
+            );
+
+            p.printPretty();
+            if (p["@type"] == "error") {
+              break;
+            }
+          }
+        } else if (res["@type"] == "authorizationStateWaitPhoneNumber") {
+          if (signPageWaitType != SignPageWaitType.phone_number_or_token_bot) {
+            setState(() {
+              is_procces = false;
+              signPageWaitType = SignPageWaitType.phone_number_or_token_bot;
+            });
+            break;
+          }
+          if (RegExp(r"^([0-9]+:[a-z0-9_-]+)$", caseSensitive: false).hashData(textEditingController.text)) {
+            var code = await widget.appData.tg.invoke(
+              "checkAuthenticationBotToken",
+              parameters: {
+                "code": textEditingController.text.replaceAll(RegExp(r"((\+)| )", caseSensitive: false), ""),
+              },
+            );
+            code.printPretty();
+
+            if (code["@type"] == "error") {
+              await CoolAlert.show(
+                context: context,
+                type: CoolAlertType.info,
+                title: "Phone Number Or Token Bot",
+                text: "Error Code\n\n${code["message"]}",
+              );
+              break;
+            }
+          } else {
+            var code = await widget.appData.tg.invoke(
+              "setAuthenticationPhoneNumber",
+              parameters: {
+                "phone_number": textEditingController.text.replaceAll(RegExp(r"((\+)| )", caseSensitive: false), ""),
+              },
+            );
+            code.printPretty();
+
+            if (code["@type"] == "error") {
+              await CoolAlert.show(
+                context: context,
+                type: CoolAlertType.info,
+                title: "Phone Number Or Token Bot",
+                text: "Error Code\n\n${code["message"]}",
+              );
+              break;
+            }
+          }
+        } else if (res["@type"] == "authorizationStateWaitCode") {
+          if (signPageWaitType != SignPageWaitType.code) {
+            setState(() {
+              is_procces = false;
+              signPageWaitType = SignPageWaitType.code;
+            });
+            break;
+          }
+          var code = await widget.appData.tg.invoke(
+            "checkAuthenticationCode",
+            parameters: {
+              "code": textEditingController.text,
+            },
+          );
+
+          code.printPretty();
+          if (code["@type"] == "error") {
+            if (code["message"] == "PHONE_CODE_EXPIRED") {
+              signPageWaitType = SignPageWaitType.phone_number_or_token_bot;
+            }
+            await CoolAlert.show(
+              context: context,
+              type: CoolAlertType.info,
+              title: "Code",
+              text: "Error Code\n\n${code["message"]}",
+            );
+
+            setState(() {
+              is_procces = false;
+              textEditingController.clear();
+            });
+            break;
+          }
+          setState(() {
+            textEditingController.clear();
+          });
+        } else if (res["@type"] == "authorizationStateWaitRegistration") {
+          if (signPageWaitType != SignPageWaitType.registration) {
+            setState(() {
+              is_procces = false;
+              signPageWaitType = SignPageWaitType.registration;
+            });
+            break;
+          }
+          var p = await widget.appData.tg.invoke(
+            "registerUser",
+            parameters: {
+              "first_name": first_name_text_editing_controller.text,
+              "last_name": first_name_text_editing_controller.text,
+            },
+          );
+          if (p["@type"] == "error") {
+            setState(() {
+              is_procces = false;
+            });
+            break;
+          }
+        } else if (res["@type"] == "authorizationStateReady") {
+          Map getMe = await widget.appData.tg.invoke("getMe");
+
+          await context.navigator().pushReplacement(
+            MaterialPageRoute(
+              builder: (context) {
+                return HomePage(
+                  appData: widget.appData,
+                );
+              },
+            ),
+          );
+          break;
+        } else if (res["@type"] == "error") {
+          setState(() {
+            is_procces = false;
+          });
+          break;
+        } else {
+          setState(() {
+            is_procces = false;
+          });
+          break;
+        }
+      }
+    });
   }
 
   Widget autoPageSignBody() {
@@ -326,15 +430,37 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                   },
                 ),
               ),
+              Visibility(
+                visible: is_test_dc,
+                child: signButton(
+                  width: context.width,
+                  text: "Generate Name Sandbox / Demo Account",
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 20,
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  onPressed: () async {
+                    List<String> names = [
+                      "Bumi",
+                      "Galaksi",
+                      "Uranus",
+                      "Pluto",
+                    ];
+                    setState(() {
+                      first_name_text_editing_controller.text = names[Random().nextInt(names.length)];
+                      last_name_text_editing_controller.text = names[Random().nextInt(names.length)];
+                    });
+                  },
+                ),
+              ),
               signButton(
                 width: context.width,
                 text: "Registration",
                 margin: const EdgeInsets.all(20),
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
                 onPressed: () async {
-                  ValidationData validationData = validation(
-                      data: first_name_text_editing_controller.text,
-                      validationDataType: ValidationDataType.first_name);
+                  ValidationData validationData = validation(data: first_name_text_editing_controller.text, validationDataType: ValidationDataType.first_name);
                   if (validationData.message != null) {
                     //
                     await CoolAlert.show(
@@ -352,68 +478,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                   setState(() {
                     is_procces = true;
                   });
-                  Future(() async {
-                    while (true) {
-                      if (is_procces == false) {
-                        break;
-                      }
-                      await Future.delayed(Duration(milliseconds: 1));
-                      Map res = await widget.tdlib.invoke(
-                        "getAuthorizationState",
-                        isInvokeThrowOnError: false,
-                      );
-                      res.printPretty();
-                      if (res["@type"] ==
-                          "authorizationStateWaitRegistration") {
-                        var p = await widget.tdlib.invoke(
-                          "registerUser",
-                          parameters: {
-                            "first_name":
-                                first_name_text_editing_controller.text,
-                            "last_name":
-                                first_name_text_editing_controller.text,
-                          },
-                          isInvokeThrowOnError: false,
-                        );
-                        if (p["@type"] == "error") {
-                          setState(() {
-                            is_procces = false;
-                          });
-                          break;
-                        }
-                        setState(() {
-                          is_procces = false;
-                          signPageWaitType = SignPageWaitType.registration;
-                        });
-                        break;
-                      } else if (res["@type"] == "error") {
-                        setState(() {
-                          is_procces = false;
-                        });
-
-                        break;
-                      } else if (res["@type"] == "authorizationStateReady") {
-                        context.navigator().pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return HomePage(
-                                tdlib: widget.tdlib,
-                              );
-                            },
-                          ),
-                        );
-                        setState(() {
-                          is_procces = false;
-                        });
-                        break;
-                      } else {
-                        setState(() {
-                          is_procces = false;
-                        });
-                        break;
-                      }
-                    }
-                  });
+                  handleAuth();
                 },
               ),
             ],
@@ -432,7 +497,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
             InkWell(
               onTap: () {
                 setState(() {
-                  signPageWaitType = SignPageWaitType.phone_number;
+                  signPageWaitType = SignPageWaitType.phone_number_or_token_bot;
                 });
               },
               child: const Icon(Icons.arrow_back),
@@ -477,9 +542,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                 margin: const EdgeInsets.all(20),
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
                 onPressed: () async {
-                  ValidationData validationData = validation(
-                      data: textEditingController.text,
-                      validationDataType: ValidationDataType.password);
+                  ValidationData validationData = validation(data: textEditingController.text, validationDataType: ValidationDataType.password);
                   if (validationData.message != null) {
                     //
                     await CoolAlert.show(
@@ -496,7 +559,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                   await Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) {
                       return HomePage(
-                        tdlib: widget.tdlib,
+                        appData: widget.appData,
                       );
                     },
                   ));
@@ -518,7 +581,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
             InkWell(
               onTap: () {
                 setState(() {
-                  signPageWaitType = SignPageWaitType.phone_number;
+                  signPageWaitType = SignPageWaitType.phone_number_or_token_bot;
                 });
               },
               child: const Icon(Icons.arrow_back),
@@ -559,15 +622,30 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                   },
                 ),
               ),
+              Visibility(
+                visible: is_test_dc,
+                child: signButton(
+                  width: context.width,
+                  text: "Generate Code Sandbox / Demo Account",
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 20,
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  onPressed: () async {
+                    setState(() {
+                      textEditingController.text = "2" * 5;
+                    });
+                  },
+                ),
+              ),
               signButton(
                 width: context.width,
                 text: "Send Code",
                 margin: const EdgeInsets.all(20),
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
                 onPressed: () async {
-                  ValidationData validationData = validation(
-                      data: textEditingController.text,
-                      validationDataType: ValidationDataType.code);
+                  ValidationData validationData = validation(data: textEditingController.text, validationDataType: ValidationDataType.code);
                   if (validationData.message != null) {
                     //
                     await CoolAlert.show(
@@ -585,81 +663,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                   setState(() {
                     is_procces = true;
                   });
-                  Future(() async {
-                    while (true) {
-                      if (is_procces == false) {
-                        break;
-                      }
-                      await Future.delayed(Duration(milliseconds: 1));
-                      Map res = await widget.tdlib.invoke(
-                        "getAuthorizationState",
-                        isInvokeThrowOnError: false,
-                      );
-                      res.printPretty();
-                      if (res["@type"] == "authorizationStateWaitCode") {
-                        var code = await widget.tdlib.invoke(
-                          "checkAuthenticationCode",
-                          parameters: {
-                            "code": textEditingController.text,
-                          },
-                          isInvokeThrowOnError: false,
-                        );
-
-                        code.printPretty();
-                        if (code["@type"] == "error") {
-                          if (code["message"] == "PHONE_CODE_EXPIRED") {
-                            signPageWaitType = SignPageWaitType.phone_number;
-                          }
-                          await CoolAlert.show(
-                            context: context,
-                            type: CoolAlertType.info,
-                            title: "Code",
-                            text: "Error Code\n\n${code["message"]}",
-                          );
-
-                          setState(() {
-                            is_procces = false;
-                            textEditingController.clear();
-                          });
-                          break;
-                        }
-                        setState(() {
-                          textEditingController.clear();
-                        });
-                      } else if (res["@type"] ==
-                          "authorizationStateWaitRegistration") {
-                        setState(() {
-                          is_procces = false;
-                          signPageWaitType = SignPageWaitType.registration;
-                        });
-                        break;
-                      } else if (res["@type"] == "authorizationStateReady") {
-                        context.navigator().pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return HomePage(
-                                tdlib: widget.tdlib,
-                              );
-                            },
-                          ),
-                        );
-                        setState(() {
-                          is_procces = false;
-                        });
-                        break;
-                      } else if (res["@type"] == "error") {
-                        setState(() {
-                          is_procces = false;
-                        });
-                        break;
-                      } else {
-                        setState(() {
-                          is_procces = false;
-                        });
-                        break;
-                      }
-                    }
-                  });
+                  handleAuth();
                 },
               ),
             ],
@@ -761,7 +765,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                     vertical: 5,
                   ),
                   child: Text(
-                    "Nomor Telepon Anda",
+                    "Nomor Telepon / Token Bot Anda",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                     ),
@@ -809,39 +813,73 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
           ),
           child: Builder(
             builder: (context) {
-              LanguageDetailData languageDetailData =
-                  languageCodeDetailData.languageDetailDataQueryForceSync(
-                onData: (languageDetailData) {
-                  try {
-                    if (languageDetailData.dial_code is String &&
-                        languageDetailData.dial_code!.isNotEmpty) {
-                      if (RegExp(
-                              "^(${languageDetailData.dial_code!.replaceAll("+", "")})",
-                              caseSensitive: false)
-                          .hashData(textEditingController.text
-                              .replaceAll(RegExp(r"(\+| )"), ""))) {
-                        return true;
-                      }
-                    }
-                  } catch (e) {}
-                  return false;
-                },
-                defaultLanguageDetailData: LanguageDetailData.create(
-                    special_type: "",
-                    name: "Unknown",
-                    flag: "-",
-                    code: "-",
-                    dial_code: "unknown"),
-              );
+              LanguageDetailData languageDetailData = () {
+                if (textEditingController.text.isEmpty) {
+                  return LanguageDetailData.create(
+                    special_type: "error",
+                    name: "Pilih Negara",
+                    flag: "🏳️",
+                    code: "choose_country",
+                    dial_code: "unknown",
+                  );
+                } else if (RegExp(r"^([0-9]+:[a-z0-9_-]+)$", caseSensitive: false).hashData(textEditingController.text)) {
+                  return LanguageDetailData.create(
+                    special_type: "error",
+                    name: "Bot",
+                    flag: "🤖️",
+                    code: "bot",
+                    dial_code: "unknown",
+                  );
+                } else if (RegExp(r"^((\+)?[0-9]+)$", caseSensitive: false).hashData(textEditingController.text)) {
+                  if (RegExp(r"^(99966[1-3])", caseSensitive: false).hashData(textEditingController.text)) {
+                    return LanguageDetailData.create(
+                      special_type: "error",
+                      name: "Sandbox Developer / Demo",
+                      flag: "🚩️",
+                      code: "developer",
+                      dial_code: "unknown",
+                    );
+                  }
+                  return languageCodeDetailData.languageDetailDataQueryForceSync(
+                    onData: (languageDetailData) {
+                      try {
+                        if (languageDetailData.dial_code is String && languageDetailData.dial_code!.isNotEmpty) {
+                          if (RegExp("^(${languageDetailData.dial_code!.replaceAll("+", "")})", caseSensitive: false).hashData(textEditingController.text.replaceAll(RegExp(r"(\+| )"), ""))) {
+                            return true;
+                          }
+                        }
+                      } catch (e) {}
+                      return false;
+                    },
+                    defaultLanguageDetailData: LanguageDetailData.create(
+                      special_type: "error",
+                      name: "Undefined",
+                      flag: "🏳️",
+                      code: "-",
+                      dial_code: "unknown",
+                    ),
+                  );
+                } else {
+                  return LanguageDetailData.create(
+                    special_type: "error",
+                    name: "Pilih Negara",
+                    flag: "🏳️",
+                    code: "choose_country",
+                    dial_code: "unknown",
+                  );
+                }
+              }.call();
               return TextFormField(
                 cursorColor: Colors.black,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 readOnly: true,
                 enabled: true,
                 // initialValue: languageDetailData.name,
-                controller:
-                    TextEditingController(text: languageDetailData.name),
+                controller: TextEditingController(text: languageDetailData.name),
                 onTap: () async {
+                  if (is_procces) {
+                    return;
+                  }
                   await showCountryList(context: context);
                 },
                 style: const TextStyle(
@@ -860,8 +898,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                     color: Colors.grey,
                     fontSize: 14.0,
                   ),
-                  prefixIconConstraints:
-                      BoxConstraints(minWidth: 18, minHeight: 18),
+                  prefixIconConstraints: BoxConstraints(minWidth: 18, minHeight: 18),
                   prefixIcon: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -881,6 +918,9 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                       minWidth: 0,
                       clipBehavior: Clip.antiAlias,
                       onPressed: () async {
+                        if (is_procces) {
+                          return;
+                        }
                         await showCountryList(context: context);
                       },
                       child: RotatedBox(
@@ -940,48 +980,43 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
             },
           ),
         ),
-
         phoneNumberForm(
           padding: EdgeInsets.symmetric(
             horizontal: 10,
             vertical: 10,
           ),
+          readOnly: is_procces,
         ),
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(vertical: 20),
-        //   child: signButton(
-        //     text: "Sign In",
-        //     width: context.width,
-        //     margin: const EdgeInsets.all(
-        //       10,
-        //     ),
-        //     borderRadius: const BorderRadius.all(
-        //       Radius.circular(10),
-        //     ),
-        //     onPressed: () async {
-        //       ValidationData validationData = validation(
-        //         data: textEditingController.text,
-        //         validationDataType: ValidationDataType.phone_number,
-        //       );
-        //       if (validationData.message != null) {
-        //         //
-        //         await CoolAlert.show(
-        //           context: context,
-        //           type: CoolAlertType.info,
-        //           title: "Phone Number",
-        //           text: validationData.message,
-        //         );
-        //         return;
-        //       }
-
-        //       setState(() {
-        //         textEditingController.clear();
-        //         keyEditingController.clear();
-        //         signPageWaitType = SignPageWaitType.code;
-        //       });
-        //     },
-        //   ),
-        // ),
+        Visibility(
+          visible: is_test_dc,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: signButton(
+              text: "Generate Phone Number Demo Account",
+              width: context.width,
+              margin: const EdgeInsets.all(
+                10,
+              ),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(10),
+              ),
+              onPressed: () async {
+                if (is_procces) {
+                  return;
+                }
+                // 99966XYYYY
+                String new_phone_number = "999662";
+                List<int> random_number = List.generate(9, (index) => index);
+                for (var i = 0; i < 4; i++) {
+                  new_phone_number += "${random_number[Random().nextInt(random_number.length)]}";
+                }
+                setState(() {
+                  textEditingController.text = new_phone_number;
+                });
+              },
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -989,14 +1024,12 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
   Future<void> showCountryList({
     required BuildContext context,
   }) async {
-    List<MapEntry<String, LanguageDetailData>> languageCodeDetailDatas =
-        languageCodeDetailData.entries.toList();
+    List<MapEntry<String, LanguageDetailData>> languageCodeDetailDatas = languageCodeDetailData.entries.toList();
 
     await showDialog(
       context: context,
       builder: (context) {
-        TextEditingController searchTextEditingController =
-            TextEditingController();
+        TextEditingController searchTextEditingController = TextEditingController();
         bool is_show_search = false;
         return StatefulBuilder(
           builder: (context, setStat) {
@@ -1009,7 +1042,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                       context.navigator().pop();
                     }
                   },
-                  child: Icon(Icons.arrow_back),
+                  child: RotatedBox(quarterTurns: 3, child: Icon(Iconsax.arrow_up)),
                 ),
                 title: Visibility(
                   visible: is_show_search,
@@ -1025,20 +1058,17 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                       Future(() {
                         setStat(
                           () {
-                            languageCodeDetailDatas = languageCodeDetailData
-                                .entries
+                            languageCodeDetailDatas = languageCodeDetailData.entries
                                 .toList()
                                 .map((e) {
                                   try {
-                                    if (RegExp(value, caseSensitive: false)
-                                        .hashData(e.value.name)) {
+                                    if (RegExp(value, caseSensitive: false).hashData(e.value.name)) {
                                       return e;
                                     }
                                   } catch (e) {}
                                   return null;
                                 })
-                                .whereType<
-                                    MapEntry<String, LanguageDetailData>>()
+                                .whereType<MapEntry<String, LanguageDetailData>>()
                                 .toList();
                           },
                         );
@@ -1054,8 +1084,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                         onPressed: () {
                           setStat(() {
                             searchTextEditingController.clear();
-                            languageCodeDetailDatas =
-                                languageCodeDetailData.entries.toList();
+                            languageCodeDetailDatas = languageCodeDetailData.entries.toList();
                           });
                         },
                         child: Icon(Icons.close),
@@ -1120,16 +1149,17 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                 ),
                 actions: [
                   Visibility(
-                      visible: (is_show_search == false),
-                      child: MaterialButton(
-                        minWidth: 0,
-                        onPressed: () async {
-                          setStat(() {
-                            is_show_search = (!is_show_search);
-                          });
-                        },
-                        child: Icon(Icons.search),
-                      )),
+                    visible: (is_show_search == false),
+                    child: MaterialButton(
+                      minWidth: 0,
+                      onPressed: () async {
+                        setStat(() {
+                          is_show_search = (!is_show_search);
+                        });
+                      },
+                      child: Icon(Iconsax.search_normal),
+                    ),
+                  ),
                 ],
               ),
               body: ListView.builder(
@@ -1138,15 +1168,9 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
                   return ListTile(
                     onTap: () {
                       if (context.navigator().canPop()) {
-                        if (languageCodeDetailDatas[index].value.dial_code
-                            is String) {
+                        if (languageCodeDetailDatas[index].value.dial_code is String) {
                           setState(() {
-                            textEditingController.text =
-                                (languageCodeDetailDatas[index]
-                                            .value
-                                            .dial_code ??
-                                        "")
-                                    .replaceAll("+", "");
+                            textEditingController.text = (languageCodeDetailDatas[index].value.dial_code ?? "").replaceAll("+", "");
                           });
                         }
                         context.navigator().pop();
@@ -1237,13 +1261,9 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
               Radius.circular(20),
             ),
             onPressed: () async {
-              ValidationData validationDataPassword = validation(
-                  data: keyEditingController.text,
-                  validationDataType: ValidationDataType.password);
+              ValidationData validationDataPassword = validation(data: keyEditingController.text, validationDataType: ValidationDataType.password);
 
-              ValidationData validationData = validation(
-                  data: textEditingController.text,
-                  validationDataType: ValidationDataType.username);
+              ValidationData validationData = validation(data: textEditingController.text, validationDataType: ValidationDataType.username);
 
               if (validationData.message != null) {
                 //
@@ -1336,13 +1356,9 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
               ),
             ),
             onPressed: () async {
-              ValidationData validationDataPassword = validation(
-                  data: keyEditingController.text,
-                  validationDataType: ValidationDataType.password);
+              ValidationData validationDataPassword = validation(data: keyEditingController.text, validationDataType: ValidationDataType.password);
 
-              ValidationData validationData = validation(
-                  data: textEditingController.text,
-                  validationDataType: ValidationDataType.username);
+              ValidationData validationData = validation(data: textEditingController.text, validationDataType: ValidationDataType.username);
               if (validationData.message != null) {
                 //
                 await CoolAlert.show(
@@ -1388,13 +1404,9 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
               ),
             ),
             onPressed: () async {
-              ValidationData validationDataPassword = validation(
-                  data: keyEditingController.text,
-                  validationDataType: ValidationDataType.password);
+              ValidationData validationDataPassword = validation(data: keyEditingController.text, validationDataType: ValidationDataType.password);
 
-              ValidationData validationData = validation(
-                  data: textEditingController.text,
-                  validationDataType: ValidationDataType.username);
+              ValidationData validationData = validation(data: textEditingController.text, validationDataType: ValidationDataType.username);
 
               if (validationData.message != null) {
                 //
@@ -1430,14 +1442,13 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
     return Padding(
       padding: padding,
       child: textFormField(
-        hintText: "628515678",
-        labelText: "Phone Number",
+        hintText: "62123456789 / 1234567890:abcdfghijklmnopqrstuvwxyz",
+        labelText: "Phone Number Or Token Bot",
         controller: textEditingController,
-        prefixIconData: Icons.phone,
+        prefixIconData: Iconsax.card,
         readOnly: readOnly,
         validator: (String? data) {
-          ValidationData validationData = validation(
-              data: data, validationDataType: ValidationDataType.phone_number);
+          ValidationData validationData = validation(data: data, validationDataType: ValidationDataType.phone_number_or_token_bot);
           return validationData.message;
         },
       ),
@@ -1476,8 +1487,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
         controller: textEditingController,
         readOnly: readOnly,
         validator: (String? data) {
-          ValidationData validationData = validation(
-              data: data, validationDataType: ValidationDataType.username);
+          ValidationData validationData = validation(data: data, validationDataType: ValidationDataType.username);
           return validationData.message;
         },
       ),
@@ -1513,8 +1523,7 @@ class _SignPageState extends State<SignPage> with TickerProviderStateMixin {
         controller: keyEditingController,
         readOnly: readOnly,
         validator: (String? data) {
-          ValidationData validationData = validation(
-              data: data, validationDataType: ValidationDataType.password);
+          ValidationData validationData = validation(data: data, validationDataType: ValidationDataType.password);
           return validationData.message;
         },
         onPressed: () {

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:galaxeus_lib_flutter/galaxeus_lib_flutter.dart';
+import 'package:telegram/widget/widget.dart';
 
-class SettingPage extends StatefulWidget {
-  const SettingPage({super.key});
+class SettingPage extends TelegramStatefulWidget {
+  const SettingPage({super.key, required super.appData});
 
   @override
   State<SettingPage> createState() => _SettingPageState();
