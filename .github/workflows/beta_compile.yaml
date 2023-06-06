@@ -95,7 +95,7 @@ jobs:
         continue-on-error: true
         with:
           name: Artifact
-          path: build/*
+          path: build/packagex/*
       - name: Publish Release
         uses: marvinpinto/action-automatic-releases@latest
         continue-on-error: true
@@ -105,4 +105,4 @@ jobs:
           prerelease: false
           title: "Release ${{ matrix.output-name }}"
           files: |
-            build/*
+            build/packagex/*

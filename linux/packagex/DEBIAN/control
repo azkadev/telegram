@@ -1,10 +1,10 @@
 Maintainer: "azkadev <azkadev@noemail.com>"
-Package: app-ui-template
+Package: telegram
 Version: 0.0.0
 Section: x11
 Priority: optional
 Architecture: amd64
 Essential: no
 Installed-Size: 0
-Description: "A new Flutter project."
-Homepage: "https://github.com/azkadev"
+Description: "A Telegram App Flutter Open Source."
+Homepage: "https://youtube.com/@azkadev"

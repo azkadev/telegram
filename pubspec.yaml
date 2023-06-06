@@ -7,6 +7,11 @@ documentation: https://youtube.com/@azkadev
 version: 0.0.0
 publish_to: none
 
+platform:
+ android:
+ linux:
+ windows:
+
 environment:
   sdk: '>=3.0.0 <4.0.0'
 
@@ -43,7 +48,7 @@ flutter:
 
   assets:    
     - assets/
-    - assets/icons/
+    # - assets/icons/
     
 msix_config: 
   display_name: telegram
