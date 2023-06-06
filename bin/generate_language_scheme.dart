@@ -16,7 +16,6 @@ void main(List<String> args) async {
 Map language_raw = {
   "sign_in": {
     "phone_number_user": "Nomor Telepon Anda",
-    "phone_number_user_display":
-        "Mohon Konfirmasi kode negara dan\nmasukan nomor telepon anda",
+    "phone_number_user_display": "Mohon Konfirmasi kode negara dan\nmasukan nomor telepon anda",
   },
 };

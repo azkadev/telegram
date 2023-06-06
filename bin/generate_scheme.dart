@@ -127,11 +127,7 @@ void main() async {
             "external_id": "oaksoaks",
             "amount": 50000,
             "title": "HEXAMINATE",
-            "profile_picture": {
-              "@type": "profilePictureUrl",
-              "url":
-                  "https://xnd-merchant-logos.s3.amazonaws.com/business/production/610836e3824b6140a513dc38-1648053563560.png"
-            },
+            "profile_picture": {"@type": "profilePictureUrl", "url": "https://xnd-merchant-logos.s3.amazonaws.com/business/production/610836e3824b6140a513dc38-1648053563560.png"},
             "url": "https://checkout.xendit.co/web/6400761f118264bbc49c871b",
           },
         },
@@ -139,6 +135,5 @@ void main() async {
     },
   ];
 
-  await jsonToScripts(datas,
-      directory: Directory(path.join(Directory.current.path, "lib", "scheme")));
+  await jsonToScripts(datas, directory: Directory(path.join(Directory.current.path, "lib", "scheme")));
 }

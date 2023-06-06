@@ -2,8 +2,7 @@
 
 import 'dart:async';
 
-import 'package:telegram/page/page.dart';
-import 'package:flutter/foundation.dart';
+import 'package:telegram/page/page.dart'; 
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -44,16 +43,14 @@ class _TelegramState extends State<Telegram> {
   Future<void> task() async {
     Future(() async {
       Directory get_app_docs_dir = await getApplicationDocumentsDirectory();
-      Directory app_tg_account =
-          Directory(path.join(get_app_docs_dir.path, "tg_account"));
+      Directory app_tg_account = Directory(path.join(get_app_docs_dir.path, "tg_account"));
       if (app_tg_account.existsSync()) {
         await app_tg_account.delete(recursive: true);
       }
       if (!app_tg_account.existsSync()) {
         await app_tg_account.create(recursive: true);
       }
-      Directory app_tg_dir =
-          Directory(path.join(get_app_docs_dir.path, "tg_dir"));
+      Directory app_tg_dir = Directory(path.join(get_app_docs_dir.path, "tg_dir"));
       if (!app_tg_dir.existsSync()) {
         await app_tg_dir.create(recursive: true);
       }
@@ -93,13 +90,7 @@ class _TelegramState extends State<Telegram> {
           );
 
           for (var i = 0; i < count_datas.length; i++) {
-            List<isar_scheme.TgClientData> tgClientDatas = await isar_db_account
-                .tgClientDatas
-                .filter()
-                .idGreaterThan(0)
-                .offset(count_datas[i])
-                .limit(10)
-                .findAll();
+            List<isar_scheme.TgClientData> tgClientDatas = await isar_db_account.tgClientDatas.filter().idGreaterThan(0).offset(count_datas[i]).limit(10).findAll();
 
             for (var index = 0; index < tgClientDatas.length; index++) {
               isar_scheme.TgClientData tgClientData = tgClientDatas[index];
@@ -140,10 +131,8 @@ class _TelegramState extends State<Telegram> {
             );
 
             if (authStateType == "authorizationStateWaitRegistration") {
-              if (update.raw["authorization_state"]["terms_of_service"]
-                  is Map) {
-                Map terms_of_service = update.raw["authorization_state"]
-                    ["terms_of_service"] as Map;
+              if (update.raw["authorization_state"]["terms_of_service"] is Map) {
+                Map terms_of_service = update.raw["authorization_state"]["terms_of_service"] as Map;
                 if (terms_of_service["text"] is Map) {
                   await tdlib.invoke(
                     "registerUser",
