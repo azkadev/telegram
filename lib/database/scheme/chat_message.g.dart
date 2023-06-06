@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'chat_data.dart';
+part of 'chat_message.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator
@@ -9,13 +9,13 @@ part of 'chat_data.dart';
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-extension GetChatDataCollection on Isar {
-  IsarCollection<ChatData> get chatDatas => this.collection();
+extension GetChatMessageCollection on Isar {
+  IsarCollection<ChatMessage> get chatMessages => this.collection();
 }
 
-const ChatDataSchema = CollectionSchema(
-  name: r'ChatData',
-  id: -2556562556259390621,
+const ChatMessageSchema = CollectionSchema(
+  name: r'ChatMessage',
+  id: 35366979330584919,
   properties: {
     r'chat_id': PropertySchema(
       id: 0,
@@ -27,69 +27,75 @@ const ChatDataSchema = CollectionSchema(
       name: r'client_user_id',
       type: IsarType.long,
     ),
-    r'data': PropertySchema(
+    r'expire_date': PropertySchema(
       id: 2,
-      name: r'data',
-      type: IsarType.longList,
+      name: r'expire_date',
+      type: IsarType.long,
     ),
-    r'from_id': PropertySchema(
+    r'is_delete': PropertySchema(
       id: 3,
-      name: r'from_id',
+      name: r'is_delete',
+      type: IsarType.bool,
+    ),
+    r'message_id': PropertySchema(
+      id: 4,
+      name: r'message_id',
       type: IsarType.long,
     )
   },
-  estimateSize: _chatDataEstimateSize,
-  serialize: _chatDataSerialize,
-  deserialize: _chatDataDeserialize,
-  deserializeProp: _chatDataDeserializeProp,
+  estimateSize: _chatMessageEstimateSize,
+  serialize: _chatMessageSerialize,
+  deserialize: _chatMessageDeserialize,
+  deserializeProp: _chatMessageDeserializeProp,
   idName: r'id',
   indexes: {},
   links: {},
   embeddedSchemas: {},
-  getId: _chatDataGetId,
-  getLinks: _chatDataGetLinks,
-  attach: _chatDataAttach,
+  getId: _chatMessageGetId,
+  getLinks: _chatMessageGetLinks,
+  attach: _chatMessageAttach,
   version: '3.1.0+1',
 );
 
-int _chatDataEstimateSize(
-  ChatData object,
+int _chatMessageEstimateSize(
+  ChatMessage object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.data.length * 8;
   return bytesCount;
 }
 
-void _chatDataSerialize(
-  ChatData object,
+void _chatMessageSerialize(
+  ChatMessage object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.chat_id);
   writer.writeLong(offsets[1], object.client_user_id);
-  writer.writeLongList(offsets[2], object.data);
-  writer.writeLong(offsets[3], object.from_id);
+  writer.writeLong(offsets[2], object.expire_date);
+  writer.writeBool(offsets[3], object.is_delete);
+  writer.writeLong(offsets[4], object.message_id);
 }
 
-ChatData _chatDataDeserialize(
+ChatMessage _chatMessageDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = ChatData();
+  final object = ChatMessage();
   object.chat_id = reader.readLong(offsets[0]);
   object.client_user_id = reader.readLong(offsets[1]);
-  object.data = reader.readLongList(offsets[2]) ?? [];
-  object.from_id = reader.readLong(offsets[3]);
+  object.expire_date = reader.readLong(offsets[2]);
   object.id = id;
+  object.is_delete = reader.readBool(offsets[3]);
+  object.message_id = reader.readLong(offsets[4]);
   return object;
 }
 
-P _chatDataDeserializeProp<P>(
+P _chatMessageDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -101,36 +107,41 @@ P _chatDataDeserializeProp<P>(
     case 1:
       return (reader.readLong(offset)) as P;
     case 2:
-      return (reader.readLongList(offset) ?? []) as P;
+      return (reader.readLong(offset)) as P;
     case 3:
+      return (reader.readBool(offset)) as P;
+    case 4:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
-Id _chatDataGetId(ChatData object) {
+Id _chatMessageGetId(ChatMessage object) {
   return object.id;
 }
 
-List<IsarLinkBase<dynamic>> _chatDataGetLinks(ChatData object) {
+List<IsarLinkBase<dynamic>> _chatMessageGetLinks(ChatMessage object) {
   return [];
 }
 
-void _chatDataAttach(IsarCollection<dynamic> col, Id id, ChatData object) {
+void _chatMessageAttach(
+    IsarCollection<dynamic> col, Id id, ChatMessage object) {
   object.id = id;
 }
 
-extension ChatDataQueryWhereSort on QueryBuilder<ChatData, ChatData, QWhere> {
-  QueryBuilder<ChatData, ChatData, QAfterWhere> anyId() {
+extension ChatMessageQueryWhereSort
+    on QueryBuilder<ChatMessage, ChatMessage, QWhere> {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
     });
   }
 }
 
-extension ChatDataQueryWhere on QueryBuilder<ChatData, ChatData, QWhereClause> {
-  QueryBuilder<ChatData, ChatData, QAfterWhereClause> idEqualTo(Id id) {
+extension ChatMessageQueryWhere
+    on QueryBuilder<ChatMessage, ChatMessage, QWhereClause> {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterWhereClause> idEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: id,
@@ -139,7 +150,8 @@ extension ChatDataQueryWhere on QueryBuilder<ChatData, ChatData, QWhereClause> {
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterWhereClause> idNotEqualTo(Id id) {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterWhereClause> idNotEqualTo(
+      Id id) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -161,7 +173,7 @@ extension ChatDataQueryWhere on QueryBuilder<ChatData, ChatData, QWhereClause> {
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterWhereClause> idGreaterThan(Id id,
+  QueryBuilder<ChatMessage, ChatMessage, QAfterWhereClause> idGreaterThan(Id id,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -170,7 +182,7 @@ extension ChatDataQueryWhere on QueryBuilder<ChatData, ChatData, QWhereClause> {
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterWhereClause> idLessThan(Id id,
+  QueryBuilder<ChatMessage, ChatMessage, QAfterWhereClause> idLessThan(Id id,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -179,7 +191,7 @@ extension ChatDataQueryWhere on QueryBuilder<ChatData, ChatData, QWhereClause> {
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterWhereClause> idBetween(
+  QueryBuilder<ChatMessage, ChatMessage, QAfterWhereClause> idBetween(
     Id lowerId,
     Id upperId, {
     bool includeLower = true,
@@ -196,9 +208,9 @@ extension ChatDataQueryWhere on QueryBuilder<ChatData, ChatData, QWhereClause> {
   }
 }
 
-extension ChatDataQueryFilter
-    on QueryBuilder<ChatData, ChatData, QFilterCondition> {
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> chat_idEqualTo(
+extension ChatMessageQueryFilter
+    on QueryBuilder<ChatMessage, ChatMessage, QFilterCondition> {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition> chat_idEqualTo(
       int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -208,7 +220,8 @@ extension ChatDataQueryFilter
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> chat_idGreaterThan(
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      chat_idGreaterThan(
     int value, {
     bool include = false,
   }) {
@@ -221,7 +234,7 @@ extension ChatDataQueryFilter
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> chat_idLessThan(
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition> chat_idLessThan(
     int value, {
     bool include = false,
   }) {
@@ -234,7 +247,7 @@ extension ChatDataQueryFilter
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> chat_idBetween(
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition> chat_idBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -251,8 +264,8 @@ extension ChatDataQueryFilter
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> client_user_idEqualTo(
-      int value) {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      client_user_idEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'client_user_id',
@@ -261,7 +274,7 @@ extension ChatDataQueryFilter
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition>
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
       client_user_idGreaterThan(
     int value, {
     bool include = false,
@@ -275,7 +288,7 @@ extension ChatDataQueryFilter
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition>
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
       client_user_idLessThan(
     int value, {
     bool include = false,
@@ -289,7 +302,8 @@ extension ChatDataQueryFilter
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> client_user_idBetween(
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      client_user_idBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -306,44 +320,46 @@ extension ChatDataQueryFilter
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> dataElementEqualTo(
-      int value) {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      expire_dateEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'data',
+        property: r'expire_date',
         value: value,
       ));
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition>
-      dataElementGreaterThan(
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      expire_dateGreaterThan(
     int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'data',
+        property: r'expire_date',
         value: value,
       ));
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> dataElementLessThan(
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      expire_dateLessThan(
     int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'data',
+        property: r'expire_date',
         value: value,
       ));
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> dataElementBetween(
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      expire_dateBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -351,7 +367,7 @@ extension ChatDataQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'data',
+        property: r'expire_date',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -360,144 +376,8 @@ extension ChatDataQueryFilter
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> dataLengthEqualTo(
-      int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'data',
-        length,
-        true,
-        length,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> dataIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'data',
-        0,
-        true,
-        0,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> dataIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'data',
-        0,
-        false,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> dataLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'data',
-        0,
-        true,
-        length,
-        include,
-      );
-    });
-  }
-
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> dataLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'data',
-        length,
-        include,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> dataLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'data',
-        lower,
-        includeLower,
-        upper,
-        includeUpper,
-      );
-    });
-  }
-
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> from_idEqualTo(
-      int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'from_id',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> from_idGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'from_id',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> from_idLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'from_id',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> from_idBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'from_id',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> idEqualTo(Id value) {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition> idEqualTo(
+      Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -506,7 +386,7 @@ extension ChatDataQueryFilter
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> idGreaterThan(
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition> idGreaterThan(
     Id value, {
     bool include = false,
   }) {
@@ -519,7 +399,7 @@ extension ChatDataQueryFilter
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> idLessThan(
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition> idLessThan(
     Id value, {
     bool include = false,
   }) {
@@ -532,7 +412,7 @@ extension ChatDataQueryFilter
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterFilterCondition> idBetween(
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition> idBetween(
     Id lower,
     Id upper, {
     bool includeLower = true,
@@ -548,159 +428,288 @@ extension ChatDataQueryFilter
       ));
     });
   }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      is_deleteEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'is_delete',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      message_idEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'message_id',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      message_idGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'message_id',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      message_idLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'message_id',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      message_idBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'message_id',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
-extension ChatDataQueryObject
-    on QueryBuilder<ChatData, ChatData, QFilterCondition> {}
+extension ChatMessageQueryObject
+    on QueryBuilder<ChatMessage, ChatMessage, QFilterCondition> {}
 
-extension ChatDataQueryLinks
-    on QueryBuilder<ChatData, ChatData, QFilterCondition> {}
+extension ChatMessageQueryLinks
+    on QueryBuilder<ChatMessage, ChatMessage, QFilterCondition> {}
 
-extension ChatDataQuerySortBy on QueryBuilder<ChatData, ChatData, QSortBy> {
-  QueryBuilder<ChatData, ChatData, QAfterSortBy> sortByChat_id() {
+extension ChatMessageQuerySortBy
+    on QueryBuilder<ChatMessage, ChatMessage, QSortBy> {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> sortByChat_id() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'chat_id', Sort.asc);
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterSortBy> sortByChat_idDesc() {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> sortByChat_idDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'chat_id', Sort.desc);
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterSortBy> sortByClient_user_id() {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> sortByClient_user_id() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'client_user_id', Sort.asc);
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterSortBy> sortByClient_user_idDesc() {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy>
+      sortByClient_user_idDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'client_user_id', Sort.desc);
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterSortBy> sortByFrom_id() {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> sortByExpire_date() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'from_id', Sort.asc);
+      return query.addSortBy(r'expire_date', Sort.asc);
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterSortBy> sortByFrom_idDesc() {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> sortByExpire_dateDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'from_id', Sort.desc);
+      return query.addSortBy(r'expire_date', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> sortByIs_delete() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'is_delete', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> sortByIs_deleteDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'is_delete', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> sortByMessage_id() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'message_id', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> sortByMessage_idDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'message_id', Sort.desc);
     });
   }
 }
 
-extension ChatDataQuerySortThenBy
-    on QueryBuilder<ChatData, ChatData, QSortThenBy> {
-  QueryBuilder<ChatData, ChatData, QAfterSortBy> thenByChat_id() {
+extension ChatMessageQuerySortThenBy
+    on QueryBuilder<ChatMessage, ChatMessage, QSortThenBy> {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> thenByChat_id() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'chat_id', Sort.asc);
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterSortBy> thenByChat_idDesc() {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> thenByChat_idDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'chat_id', Sort.desc);
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterSortBy> thenByClient_user_id() {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> thenByClient_user_id() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'client_user_id', Sort.asc);
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterSortBy> thenByClient_user_idDesc() {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy>
+      thenByClient_user_idDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'client_user_id', Sort.desc);
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterSortBy> thenByFrom_id() {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> thenByExpire_date() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'from_id', Sort.asc);
+      return query.addSortBy(r'expire_date', Sort.asc);
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterSortBy> thenByFrom_idDesc() {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> thenByExpire_dateDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'from_id', Sort.desc);
+      return query.addSortBy(r'expire_date', Sort.desc);
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterSortBy> thenById() {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> thenByIs_delete() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'is_delete', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> thenByIs_deleteDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'is_delete', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> thenByMessage_id() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'message_id', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> thenByMessage_idDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'message_id', Sort.desc);
+    });
+  }
 }
 
-extension ChatDataQueryWhereDistinct
-    on QueryBuilder<ChatData, ChatData, QDistinct> {
-  QueryBuilder<ChatData, ChatData, QDistinct> distinctByChat_id() {
+extension ChatMessageQueryWhereDistinct
+    on QueryBuilder<ChatMessage, ChatMessage, QDistinct> {
+  QueryBuilder<ChatMessage, ChatMessage, QDistinct> distinctByChat_id() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'chat_id');
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QDistinct> distinctByClient_user_id() {
+  QueryBuilder<ChatMessage, ChatMessage, QDistinct> distinctByClient_user_id() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'client_user_id');
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QDistinct> distinctByData() {
+  QueryBuilder<ChatMessage, ChatMessage, QDistinct> distinctByExpire_date() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'data');
+      return query.addDistinctBy(r'expire_date');
     });
   }
 
-  QueryBuilder<ChatData, ChatData, QDistinct> distinctByFrom_id() {
+  QueryBuilder<ChatMessage, ChatMessage, QDistinct> distinctByIs_delete() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'from_id');
+      return query.addDistinctBy(r'is_delete');
+    });
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QDistinct> distinctByMessage_id() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'message_id');
     });
   }
 }
 
-extension ChatDataQueryProperty
-    on QueryBuilder<ChatData, ChatData, QQueryProperty> {
-  QueryBuilder<ChatData, int, QQueryOperations> idProperty() {
+extension ChatMessageQueryProperty
+    on QueryBuilder<ChatMessage, ChatMessage, QQueryProperty> {
+  QueryBuilder<ChatMessage, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
     });
   }
 
-  QueryBuilder<ChatData, int, QQueryOperations> chat_idProperty() {
+  QueryBuilder<ChatMessage, int, QQueryOperations> chat_idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'chat_id');
     });
   }
 
-  QueryBuilder<ChatData, int, QQueryOperations> client_user_idProperty() {
+  QueryBuilder<ChatMessage, int, QQueryOperations> client_user_idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'client_user_id');
     });
   }
 
-  QueryBuilder<ChatData, List<int>, QQueryOperations> dataProperty() {
+  QueryBuilder<ChatMessage, int, QQueryOperations> expire_dateProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'data');
+      return query.addPropertyName(r'expire_date');
     });
   }
 
-  QueryBuilder<ChatData, int, QQueryOperations> from_idProperty() {
+  QueryBuilder<ChatMessage, bool, QQueryOperations> is_deleteProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'from_id');
+      return query.addPropertyName(r'is_delete');
+    });
+  }
+
+  QueryBuilder<ChatMessage, int, QQueryOperations> message_idProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'message_id');
     });
   }
 }

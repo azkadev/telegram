@@ -22,33 +22,38 @@ const ChatDetailSchema = CollectionSchema(
       name: r'chat_id',
       type: IsarType.long,
     ),
-    r'first_name': PropertySchema(
+    r'expire_date': PropertySchema(
       id: 1,
+      name: r'expire_date',
+      type: IsarType.long,
+    ),
+    r'first_name': PropertySchema(
+      id: 2,
       name: r'first_name',
       type: IsarType.string,
     ),
     r'last_name': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'last_name',
       type: IsarType.string,
     ),
     r'status': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'status',
       type: IsarType.string,
     ),
     r'title': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'title',
       type: IsarType.string,
     ),
     r'type': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'type',
       type: IsarType.string,
     ),
     r'username': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'username',
       type: IsarType.string,
     )
@@ -89,12 +94,13 @@ void _chatDetailSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.chat_id);
-  writer.writeString(offsets[1], object.first_name);
-  writer.writeString(offsets[2], object.last_name);
-  writer.writeString(offsets[3], object.status);
-  writer.writeString(offsets[4], object.title);
-  writer.writeString(offsets[5], object.type);
-  writer.writeString(offsets[6], object.username);
+  writer.writeLong(offsets[1], object.expire_date);
+  writer.writeString(offsets[2], object.first_name);
+  writer.writeString(offsets[3], object.last_name);
+  writer.writeString(offsets[4], object.status);
+  writer.writeString(offsets[5], object.title);
+  writer.writeString(offsets[6], object.type);
+  writer.writeString(offsets[7], object.username);
 }
 
 ChatDetail _chatDetailDeserialize(
@@ -105,13 +111,14 @@ ChatDetail _chatDetailDeserialize(
 ) {
   final object = ChatDetail();
   object.chat_id = reader.readLong(offsets[0]);
-  object.first_name = reader.readString(offsets[1]);
+  object.expire_date = reader.readLong(offsets[1]);
+  object.first_name = reader.readString(offsets[2]);
   object.id = id;
-  object.last_name = reader.readString(offsets[2]);
-  object.status = reader.readString(offsets[3]);
-  object.title = reader.readString(offsets[4]);
-  object.type = reader.readString(offsets[5]);
-  object.username = reader.readString(offsets[6]);
+  object.last_name = reader.readString(offsets[3]);
+  object.status = reader.readString(offsets[4]);
+  object.title = reader.readString(offsets[5]);
+  object.type = reader.readString(offsets[6]);
+  object.username = reader.readString(offsets[7]);
   return object;
 }
 
@@ -125,7 +132,7 @@ P _chatDetailDeserializeProp<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
-      return (reader.readString(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 2:
       return (reader.readString(offset)) as P;
     case 3:
@@ -135,6 +142,8 @@ P _chatDetailDeserializeProp<P>(
     case 5:
       return (reader.readString(offset)) as P;
     case 6:
+      return (reader.readString(offset)) as P;
+    case 7:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -278,6 +287,62 @@ extension ChatDetailQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'chat_id',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<ChatDetail, ChatDetail, QAfterFilterCondition>
+      expire_dateEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'expire_date',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<ChatDetail, ChatDetail, QAfterFilterCondition>
+      expire_dateGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'expire_date',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<ChatDetail, ChatDetail, QAfterFilterCondition>
+      expire_dateLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'expire_date',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<ChatDetail, ChatDetail, QAfterFilterCondition>
+      expire_dateBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'expire_date',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1155,6 +1220,18 @@ extension ChatDetailQuerySortBy
     });
   }
 
+  QueryBuilder<ChatDetail, ChatDetail, QAfterSortBy> sortByExpire_date() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'expire_date', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ChatDetail, ChatDetail, QAfterSortBy> sortByExpire_dateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'expire_date', Sort.desc);
+    });
+  }
+
   QueryBuilder<ChatDetail, ChatDetail, QAfterSortBy> sortByFirst_name() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'first_name', Sort.asc);
@@ -1239,6 +1316,18 @@ extension ChatDetailQuerySortThenBy
   QueryBuilder<ChatDetail, ChatDetail, QAfterSortBy> thenByChat_idDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'chat_id', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ChatDetail, ChatDetail, QAfterSortBy> thenByExpire_date() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'expire_date', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ChatDetail, ChatDetail, QAfterSortBy> thenByExpire_dateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'expire_date', Sort.desc);
     });
   }
 
@@ -1335,6 +1424,12 @@ extension ChatDetailQueryWhereDistinct
     });
   }
 
+  QueryBuilder<ChatDetail, ChatDetail, QDistinct> distinctByExpire_date() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'expire_date');
+    });
+  }
+
   QueryBuilder<ChatDetail, ChatDetail, QDistinct> distinctByFirst_name(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1389,6 +1484,12 @@ extension ChatDetailQueryProperty
   QueryBuilder<ChatDetail, int, QQueryOperations> chat_idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'chat_id');
+    });
+  }
+
+  QueryBuilder<ChatDetail, int, QQueryOperations> expire_dateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'expire_date');
     });
   }
 

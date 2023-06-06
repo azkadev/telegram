@@ -244,8 +244,14 @@ class _HomePageState extends State<HomePage> {
                                 if (chat["photo"] is Map) {
                                   Map photo = chat["photo"];
                                   if (photo["small"] is Map) {
-                                    if (photo["small"]["local"] is Map && photo["small"]["local"]["path"] is String && (photo["small"]["local"]["path"] as String).isNotEmpty) {
-                                      File file = File(photo["small"]["local"]["path"]);
+                                    if (photo["small"]["local"] is Map &&
+                                        photo["small"]["local"]["path"]
+                                            is String &&
+                                        (photo["small"]["local"]["path"]
+                                                as String)
+                                            .isNotEmpty) {
+                                      File file =
+                                          File(photo["small"]["local"]["path"]);
                                       if (file.existsSync()) {
                                         return DecorationImage(
                                           fit: BoxFit.cover,
@@ -265,7 +271,10 @@ class _HomePageState extends State<HomePage> {
                                       },
                                     );
                                     res.printPretty();
-                                    if (res["local"] is Map && res["local"]["path"] is String && (res["local"]["path"] as String).isNotEmpty) {
+                                    if (res["local"] is Map &&
+                                        res["local"]["path"] is String &&
+                                        (res["local"]["path"] as String)
+                                            .isNotEmpty) {
                                       File file = File(res["local"]["path"]);
                                       if (file.existsSync()) {
                                         return DecorationImage(
@@ -276,11 +285,14 @@ class _HomePageState extends State<HomePage> {
                                     }
                                   }
 
-                                  if (photo["minithumbnail"] is Map && photo["minithumbnail"]["data"] is String) {
+                                  if (photo["minithumbnail"] is Map &&
+                                      photo["minithumbnail"]["data"]
+                                          is String) {
                                     return DecorationImage(
                                       fit: BoxFit.cover,
                                       image: Image.memory(
-                                        base64Decode(photo["minithumbnail"]["data"]),
+                                        base64Decode(
+                                            photo["minithumbnail"]["data"]),
                                       ).image,
                                     );
                                   }
@@ -291,11 +303,14 @@ class _HomePageState extends State<HomePage> {
                                 DecorationImage? image;
                                 if (chat["photo"] is Map) {
                                   Map photo = chat["photo"];
-                                  if (photo["minithumbnail"] is Map && photo["minithumbnail"]["data"] is String) {
+                                  if (photo["minithumbnail"] is Map &&
+                                      photo["minithumbnail"]["data"]
+                                          is String) {
                                     image = DecorationImage(
                                       fit: BoxFit.cover,
                                       image: Image.memory(
-                                        base64Decode(photo["minithumbnail"]["data"]),
+                                        base64Decode(
+                                            photo["minithumbnail"]["data"]),
                                       ).image,
                                     );
                                   }
@@ -358,7 +373,8 @@ class _HomePageState extends State<HomePage> {
     await showDialog(
       context: context,
       builder: (context) {
-        TextEditingController searchTextEditingController = TextEditingController();
+        TextEditingController searchTextEditingController =
+            TextEditingController();
 
         return StatefulBuilder(
           builder: (context, setStat) {
@@ -462,7 +478,8 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () async {
                       setStat(() {});
                     },
-                    child: const RotatedBox(quarterTurns: 2, child: Icon(Icons.arrow_back_ios_new)),
+                    child: const RotatedBox(
+                        quarterTurns: 2, child: Icon(Icons.arrow_back_ios_new)),
                   ),
                 ],
               ),
@@ -529,11 +546,13 @@ class _HomePageState extends State<HomePage> {
 
                               if (chat["photo"] is Map) {
                                 Map photo = chat["photo"];
-                                if (photo["minithumbnail"] is Map && photo["minithumbnail"]["data"] is String) {
+                                if (photo["minithumbnail"] is Map &&
+                                    photo["minithumbnail"]["data"] is String) {
                                   image = DecorationImage(
                                     fit: BoxFit.cover,
                                     image: Image.memory(
-                                      base64Decode(photo["minithumbnail"]["data"]),
+                                      base64Decode(
+                                          photo["minithumbnail"]["data"]),
                                     ).image,
                                   );
                                 }
@@ -544,7 +563,8 @@ class _HomePageState extends State<HomePage> {
                                 leading: Container(
                                   height: 45,
                                   width: 45,
-                                  decoration: BoxDecoration(color: Colors.red, image: image),
+                                  decoration: BoxDecoration(
+                                      color: Colors.red, image: image),
                                 ),
                                 title: Text(
                                   chat["title"] ?? "",

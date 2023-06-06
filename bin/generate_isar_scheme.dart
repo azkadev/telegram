@@ -76,8 +76,11 @@ void main() async {
       className: type_name,
       // isStatic: false,
     );
-    await res.saveToFile(Directory(
-        path.join(Directory.current.path, "lib", "database", "scheme")));
+    await res.saveToFile(
+      Directory(
+        path.join(Directory.current.path, "lib", "database", "scheme"),
+      ),
+    );
   }
 }
 

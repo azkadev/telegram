@@ -1,26 +1,20 @@
 // ignore_for_file: non_constant_identifier_names
 import 'dart:convert';
 import 'package:isar/isar.dart';
-part "chat_detail.g.dart";
+part "chat_message.g.dart";
 
 @collection
-class ChatDetail {
+class ChatMessage {
   // Id id = Isar.autoIncrement;
   Id id = Isar.autoIncrement;
 
+  int client_user_id = 0;
+
   int chat_id = 0;
 
-  String first_name = "";
+  int message_id = 0;
 
-  String last_name = "";
-
-  String title = "";
-
-  String username = "";
-
-  String status = "";
-
-  String type = "";
+  bool is_delete = false;
 
   int expire_date = 1686078425441;
 
@@ -31,32 +25,20 @@ class ChatDetail {
 
   /// operator map data
   void operator []=(key, value) {
+    if (key == "client_user_id") {
+      client_user_id = value;
+    }
+
     if (key == "chat_id") {
       chat_id = value;
     }
 
-    if (key == "first_name") {
-      first_name = value;
+    if (key == "message_id") {
+      message_id = value;
     }
 
-    if (key == "last_name") {
-      last_name = value;
-    }
-
-    if (key == "title") {
-      title = value;
-    }
-
-    if (key == "username") {
-      username = value;
-    }
-
-    if (key == "status") {
-      status = value;
-    }
-
-    if (key == "type") {
-      type = value;
+    if (key == "is_delete") {
+      is_delete = value;
     }
 
     if (key == "expire_date") {
@@ -116,13 +98,10 @@ class ChatDetail {
   /// return original data json
   Map toJson() {
     return {
+      "client_user_id": client_user_id,
       "chat_id": chat_id,
-      "first_name": first_name,
-      "last_name": last_name,
-      "title": title,
-      "username": username,
-      "status": status,
-      "type": type,
+      "message_id": message_id,
+      "is_delete": is_delete,
       "expire_date": expire_date,
     };
   }
@@ -141,26 +120,23 @@ class ChatDetail {
   /// return original data json
   static Map get defaultData {
     return {
+      "client_user_id": 0,
       "chat_id": 0,
-      "first_name": "",
-      "last_name": "",
-      "title": "",
-      "username": "",
-      "status": "",
-      "type": "",
+      "message_id": 0,
+      "is_delete": false,
       "expire_date": 1686078425441
     };
   }
 
-  static ChatDetail create({
+  static ChatMessage create({
     bool utils_is_print_data = false,
   }) {
-    ChatDetail chatDetail_data_create = ChatDetail();
+    ChatMessage chatMessage_data_create = ChatMessage();
 
     if (utils_is_print_data) {
-      // print(chatDetail_data_create.toStringPretty());
+      // print(chatMessage_data_create.toStringPretty());
     }
 
-    return chatDetail_data_create;
+    return chatMessage_data_create;
   }
 }
