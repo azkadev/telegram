@@ -3,10 +3,19 @@
 Wip Telegram Open Source
 
 
+---
 
+
+### Building
+
+1. Local PC
+
+```bash
 git clone https://github.com/azkadev/telegram.git
 cd telegram
 flutter build
+```
+
 
 ### Screenshot Development
 
