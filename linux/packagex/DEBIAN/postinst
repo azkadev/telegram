@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+ln -s /usr/share/telegram/telegram /usr/bin/telegram
+chmod +x /usr/bin/telegram
+exit 0

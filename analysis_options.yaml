@@ -1,0 +1,7 @@
+include: package:flutter_lints/flutter.yaml
+ 
+linter: 
+  rules:
+    non_constant_identifier_names: false
+    empty_catches: false
+    unnecessary_brace_in_string_interps: false

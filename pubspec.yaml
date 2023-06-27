@@ -1,0 +1,66 @@
+name: telegram
+description: A Telegram App Flutter Open Source.
+homepage: https://youtube.com/@azkadev
+repository: https://github.com/azkadev/telegram
+issue_tracker: https://github.com/azkadev/telegram/azkadev
+documentation: https://youtube.com/@azkadev
+version: 0.0.0
+publish_to: none
+
+platform:
+ android:
+ linux:
+ windows:
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.5
+  galaxeus_lib: ^0.0.73
+  url_launcher: ^6.1.11
+  universal_io: ^2.2.0
+  galaxeus_lib_flutter: ^0.0.8
+  cool_alert: ^2.0.1
+  telegram_client: ^0.4.20
+  isar: ^3.1.0+1
+  isar_flutter_libs: ^3.1.0+1
+  path_provider: ^2.0.15
+  telegram_client_flutter: ^0.0.9
+  path: ^1.8.3
+  googleapis_client: ^0.0.4
+  translate_client: ^0.0.1
+  iconsax: ^0.0.8
+
+dev_dependencies:
+  flutter_lints: ^2.0.1
+  packagex: ^0.0.28
+  msix: ^3.12.1
+  isar_generator: ^3.1.0+1 
+  build_runner: ^2.4.2
+
+  
+
+flutter:
+  uses-material-design: true
+
+  # assets:    
+    # - assets/
+    # - assets/icons/
+    
+msix_config: 
+  display_name: telegram
+  install_certificate: false
+  
+packagex:
+  name: telegram
+  dart_target: telegram
+  flutter_target: main
+  dart_name: telegram
+  flutter_name: telegram
+  flutter_commands:
+    obfuscate: true
+    split-debug-info: 0.0.5
+  

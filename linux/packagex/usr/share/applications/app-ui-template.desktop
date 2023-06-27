@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Version=0.0.0
+Name=app-ui-template
+GenericName=General Application
+Exec=app-ui-template %U
+Categories=Music;Media;
+Keywords=Hello;World;Test;Application;
+StartupNotify=true
