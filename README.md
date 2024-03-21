@@ -1,32 +1,20 @@
-# Wip Telegram Full Open Source
+IyBXaXAgVGVsZWdyYW0gRnVsbCBPcGVuIFNvdXJjZQoKV2lwIFRlbGVncmFt
+IE9wZW4gU291cmNlCgotLS0KCgojIyMgSW5mb3JtYXRpb24KCkRpa2FyZW5h
+a2FuIEluaSBPcGVuIFNvdXJjZSBKYWRpIHNheWEgdGlkYWsgbWVtZW50aW5n
+a2FuIHVpIHV4IHlhbmcgYmFndXMgamlrYSBrYW11IGluZ2luIG1lbWFrYWkg
+dWkgeWFuZyBiYWd1cyBwYWthaSBWZXJzaSBbR2x4IEdyYW1dKGh0dHBzOi8v
+Z2l0aHViLmNvbS9hemthZGV2L3RlbGVncmFtKQoKIyMjIEJ1aWxkaW5nIC8g
+Q29tcGlsZSBQcm9qZWN0CgoxLiBMb2NhbCBQQwoKYGBgYmFzaApnaXQgY2xv
+bmUgaHR0cHM6Ly9naXRodWIuY29tL2F6a2FkZXYvdGVsZWdyYW0uZ2l0CmNk
+IHRlbGVncmFtCmZsdXR0ZXIgYnVpbGQKYGBgCgojIyMgRG9jcyBTb3VyY2Ug
+TGVhcm5pbmcgRGV2ZWxvcG1lbnQgVGhpcyBQcm9qZWN0CgoxLiBbVERMSUIg
+LSBET0NTXShodHRwczovL2NvcmUudGVsZWdyYW0ub3JnL3RkbGliL2RvY3Mp
+CjIuIFtGbHV0dGVyXShodHRwczovL2RvY3MuZmx1dHRlci5kZXYvKQozLiBb
+RGFydF0oaHR0cHM6Ly9kYXJ0LmRldi9ndWlkZXMpCgojIyMgU2NyZWVuc2hv
+dCBEZXZlbG9wbWVudAoKIVtdKC5naXRodWIvYXNzZXRzL3NpZ25fcGFnZV8w
+X2Rldi5wbmcpCiFbXSguZ2l0aHViL2Fzc2V0cy9zaWduX3BhZ2VfMV9kZXYu
+cG5nKQohW10oLmdpdGh1Yi9hc3NldHMvaG9tZV9wYWdlXzBfZGV2LnBuZyk=
 
-Wip Telegram Open Source
-
----
-
-
-### Information
-
-Dikarenakan Ini Open Source Jadi saya tidak mementingkan ui ux yang bagus jika kamu ingin memakai ui yang bagus pakai Versi [Glx Gram](https://github.com/azkadev/telegram)
-
-### Building / Compile Project
-
-1. Local PC
-
-```bash
-git clone https://github.com/azkadev/telegram.git
-cd telegram
-flutter build
-```
-
-### Docs Source Learning Development This Project
-
-1. [TDLIB - DOCS](https://core.telegram.org/tdlib/docs)
-2. [Flutter](https://docs.flutter.dev/)
-3. [Dart](https://dart.dev/guides)
-
-### Screenshot Development
-
-![](.github/assets/sign_page_0_dev.png)
-![](.github/assets/sign_page_1_dev.png)
-![](.github/assets/home_page_0_dev.png)
+<!-- START GLOBAL CORPORATION -->
+404: Not Found
+<!-- END GLOBAL CORPORATION -->
